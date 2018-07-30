@@ -1,7 +1,8 @@
 import {
   SEARCH_REQUESTED,
   SEARCH_SUCCESS,
-  SEARCH_FAILIURE
+  SEARCH_FAILIURE,
+  LOAD_MORE
 } from '../actions';
 
 const initialState = {
@@ -24,6 +25,18 @@ const searchResultStore = (state = initialState, action) => {
         isSearching :  false,
         resultCount : payload.resultCount,
         items       : payload.items
+      };
+    case LOAD_MORE:
+      // remove duplicates
+      const cleanItems = payload.items.filter(item => {
+        const inState = state.items.findIndex( stateItem => stateItem.id === item.id);
+        if (inState < 0) return true;
+        return false;
+      });
+      return {
+        ...state,
+        isSearching : false,
+        items       : [...state.items, ...cleanItems]
       };
     case SEARCH_FAILIURE:
       return {

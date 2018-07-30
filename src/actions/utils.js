@@ -1,3 +1,9 @@
+const extractData = item => ({
+  id       : item.id,
+  selfLink : item.selfLink,
+  ...item.volumeInfo
+});
+
 export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -10,4 +16,11 @@ export const checkStatus = (response) => {
 
 export const parseJSON = (response) => {
   return response.json();
+}
+
+export const trimItems = response => {
+  return {
+    ...response,
+    items : response.items.map(extractData)
+  };
 }

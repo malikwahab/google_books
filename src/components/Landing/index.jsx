@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Row, FormGroup, FormControl, InputGroup, Button, Col, Form } from 'react-bootstrap';
-import { makeSearch } from '../../actions';
+import { makeSearch, loadMore } from '../../actions';
 import { connect } from 'react-redux';
+import Items from '../Items';
 
 import './styles.css';
 
@@ -14,13 +15,24 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  makeSearch
+  makeSearch,
+  loadMore
 }
 
-class Landing extends Component {
+class Landing extends PureComponent {
   state = {
-    searchTerm: ''
+    searchTerm  : '',
+    currentIndex : 0 
   }
+
+  componentDidMount() {
+    window.onscroll = (event) => {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        this.handleMoreRequest();
+      }
+    }
+  }
+  
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -29,12 +41,20 @@ class Landing extends Component {
   }
 
   handleFieldChange = (event) => {
+    const searchTerm = event.target.value
     this.setState({
-      searchTerm: event.target.value
+      searchTerm
     });
   }
 
+  handleMoreRequest = () => {
+    const { searchTerm, currentIndex } = this.state;
+    const newIndex = currentIndex + 10;
+    this.setState({ currentIndex: newIndex}, () => this.props.loadMore(searchTerm, newIndex));
+  }
+
   render() {
+   console.log(this.props.items);    
     return (
       <div>
         <Row className="show-grid">
@@ -56,7 +76,7 @@ class Landing extends Component {
           </Form>
         </Row>
         <Row className="show-grid">
-          {this.props.items.map(item => <div key={item.id}>{item.volumeInfo.title}</div>)}
+          <Items items={this.props.items} />
         </Row>
       </div>
     )
