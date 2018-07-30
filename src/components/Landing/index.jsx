@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Row, FormGroup, FormControl, InputGroup, Button, Col, Form } from 'react-bootstrap';
+import { Row, FormGroup, FormControl, InputGroup, Button, Form } from 'react-bootstrap';
 import { makeSearch, loadMore } from '../../actions';
 import { connect } from 'react-redux';
 import Items from '../Items';
@@ -54,7 +54,6 @@ class Landing extends PureComponent {
   }
 
   render() {
-   console.log(this.props.items);    
     return (
       <div>
         <Row className="show-grid">
