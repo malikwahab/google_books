@@ -1,12 +1,15 @@
 import React from 'react';
 import { Grid } from 'react-bootstrap';
+import './styles.css';
 
 const App = ({ children }) =>
-  <Grid>
+  <div>
     <div className="header">
-      React
+      <h4>Google API React</h4> 
     </div>
-    {children}
-  </Grid>
+    <Grid>
+      {children}
+    </Grid>
+  </div>
 
 export default App;
